@@ -10,6 +10,7 @@ const routes: Routes = [
     path: '',
     loadChildren: () => NogalesFeedbackModule,
   },
+  { path: 'nogales-feedback', loadChildren: () => import('./views/nogales-feedback/nogales-feedback.module').then(m => m.NogalesFeedbackModule) },
 ];
 
 

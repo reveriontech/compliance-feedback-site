@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { NogalesFeedbackRoutingModule } from './nogales-feedback-routing.module';
 import { NogalesFeedbackComponent } from './nogales-feedback.component';
-import { MainComponent } from './components/main/main.component';
 
 
 @NgModule({
   declarations: [
-    NogalesFeedbackComponent,
-    MainComponent
+    NogalesFeedbackComponent
   ],
   imports: [
     CommonModule,
