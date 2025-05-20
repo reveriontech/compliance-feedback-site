@@ -1,6 +1,10 @@
 # nogales-feedback
 
+Install angular global:
 
+```
+npm install -g @angular/cli@18.0.7
+```
 
 ## Add new application
 ```
