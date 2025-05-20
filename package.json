@@ -5,7 +5,7 @@
   "main": "app.mjs",
   "scripts": {
     "bip": "ffplay /sound/finish.mp3 -nodisp -nostats -hide_banner -autoexit",
-    "angular": "ng serve --host \"nodeserver\" --disable-host-check",
+    "angular": "ng serve --host \"localhost\" --disable-host-check",
     "angular_local": "rm -rf .angular && ng serve",
     "build_local": "npm run copy_version && ng build --output-hashing=bundles",
     "start": "npx nodemon app.mjs",

@@ -1,1 +1,64 @@
-<p>nogales-feedback works!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback</title>
+
+</head>
+<body>
+    <section class="background-container">
+        <div class="another-container">
+
+            <!-- This is for the left side -->
+             <div class="left-side">
+                <h2>Your opinion matters</h2>
+                <p>At our team we deeply value your feedback. If <br /> have any suggestions or
+                  complaints we <br /> encourage you to share them.</p>
+
+                  <br>
+                  <br>
+
+                  <p class="bold-text">Your comments are completely anonymous.<br /> We do not collect any personal information</p>
+             </div>
+
+             <!-- This is for the right side -->
+              <div class="right-side">
+                <ng-container *ngIf="!submitted; else thankYou">
+                  <form (ngSubmit)="onSubmit()" #feedbackForm="ngForm">
+                    <div>
+                      <select name="department" required [(ngModel)]="formData.department" #dept="ngModel">
+                        <option value="" disabled selected>Select your department</option>
+                        <option value="psychological">Nogales Psychological Counseling</option>
+                        <option value="sunshine">Sunshine</option>
+                        <option value="familia">Casa de la Familia</option>
+                      </select>
+                    </div>
+                    <div>
+                      <textarea
+                        name="message"
+                        id="message"
+                        placeholder="Enter your message"
+                        required
+                        [(ngModel)]="formData.message"
+                        #msg="ngModel"
+                      ></textarea>
+                    </div>
+                    <button type="submit" [disabled]="!feedbackForm.form.valid">{{ buttonText }}</button>
+                  </form>
+                </ng-container>
+                <ng-template #thankYou>
+                  <div class="thank-you">
+                    <h3>Thank you for helping us improve!</h3>
+                    <br>
+                    <p>Your anonymous submission has been shared with our team.</p>
+                    <p>We will review it shortly.</p>
+                    <button (click)="resetForm()">Make New Submission</button>
+                  </div>
+                </ng-template>
+              </div>
+
+        </div>
+    </section>
+</body>
+</html>

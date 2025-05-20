@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import { NogalesFeedbackRoutingModule } from './nogales-feedback-routing.module';
 import { NogalesFeedbackComponent } from './nogales-feedback.component';
@@ -11,7 +12,8 @@ import { NogalesFeedbackComponent } from './nogales-feedback.component';
   ],
   imports: [
     CommonModule,
-    NogalesFeedbackRoutingModule
+    NogalesFeedbackRoutingModule,
+    FormsModule
   ]
 })
 export class NogalesFeedbackModule { }
