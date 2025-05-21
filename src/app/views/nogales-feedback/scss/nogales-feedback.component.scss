@@ -209,13 +209,6 @@ $desktop: 1024px;
       background: #a34fae;
    }
 
-    @media screen and (max-width: $desktop) {
-      width: 80%;
-      height: auto;
-      padding: 2rem;
-      gap: 3rem;
-    }
-
     @media screen and (max-width: $tablet) {
       width: 90%;
       flex-direction: column;
