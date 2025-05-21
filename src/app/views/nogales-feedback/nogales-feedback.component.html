@@ -26,13 +26,15 @@
               <div class="right-side">
                 <ng-container *ngIf="!submitted; else thankYou">
                   <form (ngSubmit)="onSubmit()" #feedbackForm="ngForm">
-                    <div>
-                      <select name="department" required [(ngModel)]="formData.department" #dept="ngModel">
-                        <option value="" disabled selected>Select your department</option>
-                        <option value="psychological">Nogales Psychological Counseling</option>
-                        <option value="sunshine">Sunshine</option>
-                        <option value="familia">Casa de la Familia</option>
-                      </select>
+                    <div class="custom-select">
+                      <div class="select-selected" (click)="toggleDropdown()">
+                        {{ formData.department || 'Select your department' }}
+                      </div>
+                      <ul class="select-items" [class.select-hide]="!isDropdownOpen">
+                        <li (click)="selectDepartment('psychological')">Nogales Psychological Counseling</li>
+                        <li (click)="selectDepartment('sunshine')">Sunshine</li>
+                        <li (click)="selectDepartment('familia')">Casa de la Familia</li>
+                      </ul>
                     </div>
                     <div>
                       <textarea
@@ -44,7 +46,10 @@
                         #msg="ngModel"
                       ></textarea>
                     </div>
-                    <button type="submit" [disabled]="!feedbackForm.form.valid">{{ buttonText }}</button>
+                    <button type="submit" [disabled]="!feedbackForm.form.valid || isLoading">
+                      <span *ngIf="!isLoading">{{ buttonText }}</span>
+                      <div class="spinner" *ngIf="isLoading"></div>
+                    </button>
                   </form>
                 </ng-container>
                 <ng-template #thankYou>
@@ -57,7 +62,6 @@
                   </div>
                 </ng-template>
               </div>
-
         </div>
     </section>
 </body>

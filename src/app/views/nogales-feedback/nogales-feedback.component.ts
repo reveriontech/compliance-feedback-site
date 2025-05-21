@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-nogales-feedback',
@@ -8,16 +8,37 @@ import { Component } from '@angular/core';
 export class NogalesFeedbackComponent {
   submitted = false;
   buttonText = 'Submit';
+  isDropdownOpen = false;
+  isLoading = false;
   formData = {
     department: '',
     message: ''
   };
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.custom-select')) {
+      this.isDropdownOpen = false;
+    }
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  selectDepartment(department: string) {
+    this.formData.department = department;
+    this.isDropdownOpen = false;
+  }
+
   onSubmit() {
-    this.buttonText = 'Submitted!';
+    this.isLoading = true;
+    this.buttonText = 'Submitting...';
     setTimeout(() => {
       this.buttonText = 'Submit';
       this.submitted = true;
+      this.isLoading = false;
     }, 2000);
   }
 
@@ -26,5 +47,6 @@ export class NogalesFeedbackComponent {
     this.formData.message = '';
     this.submitted = false;
     this.buttonText = 'Submit';
+    this.isLoading = false;
   }
 }

@@ -42,6 +42,7 @@ $desktop: 1024px;
 
   .another-container {
     background-color: #a34fae7a;
+    border-radius: 1rem;
     width: 60%;
     height: 60%;
     display: flex;
@@ -58,7 +59,7 @@ $desktop: 1024px;
       }
 
       p {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         letter-spacing: 2px;
         line-height: 1.2;
         font-weight: 100;
@@ -87,25 +88,67 @@ $desktop: 1024px;
         gap: 1.5rem;
       }
 
-      select {
+      .custom-select {
+        position: relative;
         width: 100%;
+      }
+
+      .select-selected {
         padding: 1rem;
         border: 1.5px solid #e0e0e0;
         border-radius: 0.6rem;
         font-size: 1rem;
         background: #faf9fa;
         color: #444;
+        cursor: pointer;
+        position: relative;
 
-        option {
-          display: flex;
-          flex-direction: column;
-          padding: 1rem;
+        &::after {
+          content: "▾";
+          font-size: 18px;
+          color: #333;
+          position: absolute;
+          right: 15px;
+          top: 50%;
+          transform: translateY(-50%);
+          pointer-events: none;
         }
+      }
+
+      .select-items {
+        position: absolute;
+        background-color: #eeeeee;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 99;
+        margin-top: 0.01rem;
+        border-radius: 0.6rem;
+        box-shadow: 0 2px 12px rgba(124, 123, 123, 0.08);
+        padding: 0.5rem 0;
+        list-style: none;
+
+        li {
+          padding: 0.8rem 1rem;
+          cursor: pointer;
+          color: #444;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background-color: #B3B3B3;
+            border-radius: 0.6rem;
+            color: white;
+          }
+        }
+      }
+
+      .select-hide {
+        display: none;
       }
 
       textarea {
         width: 94.5%;
-        height: 150px;
+        height: 180px;
         padding: 1rem;
         border: 1.5px solid #e0e0e0;
         border-radius: 0.6rem;
@@ -120,7 +163,11 @@ $desktop: 1024px;
     }
 
     button[type="submit"] {
-      margin-top: 12rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 2rem;
+      margin-top: 0.5rem;
       background: #555;
       color: #fff;
       border: none;
@@ -129,13 +176,117 @@ $desktop: 1024px;
       font-size: 1rem;
       font-weight: 500;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
+      min-width: 120px;
+      min-height: 40px;
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border: 3px solid #ffffff;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s linear infinite;
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     button[type="submit"]:hover {
       background: #a34fae;
    }
 
+    @media screen and (max-width: $desktop) {
+      width: 80%;
+      height: auto;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    @media screen and (max-width: $tablet) {
+      width: 90%;
+      flex-direction: column;
+      height: auto;
+      padding: 1.5rem;
+      gap: 2rem;
+
+      .left-side {
+        text-align: center;
+        width: 100%;
+
+        h2 {
+          font-size: 2.5rem;
+        }
+
+        p {
+          font-size: 1.1rem;
+        }
+      }
+
+      .right-side {
+        width: 100%;
+        height: auto;
+        padding: 1.5rem;
+
+        textarea {
+          width: 93%;
+          height: 150px;
+        }
+      }
+
+      button[type="submit"] {
+        width: 100%;
+        align-self: center;
+        padding: 0.7rem 0;
+      }
+    }
+
+    @media screen and (max-width: $mobile) {
+      width: 95%;
+      padding: 1rem;
+
+      .left-side {
+        h2 {
+          font-size: 2rem;
+        }
+
+        p {
+          font-size: 1rem;
+        }
+      }
+
+      .right-side {
+        padding: 1rem;
+
+        .select-selected {
+          padding: 0.8rem;
+          font-size: 0.9rem;
+        }
+
+        textarea {
+          height: 120px;
+          font-size: 0.9rem;
+        }
+
+        button[type="submit"] {
+          width: 100%;
+          align-self: center;
+          padding: 0.6rem 0;
+        }
+      }
+    }
   }
 }
 
@@ -168,9 +319,33 @@ $desktop: 1024px;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s;
-    margin-top: 1rem;
+    margin-top: 6rem;
   }
   button:hover {
     background: #a34fae;
+  }
+
+  @media screen and (max-width: $tablet) {
+    align-items: center;
+    text-align: center;
+
+    button {
+      margin-top: 3rem;
+    }
+  }
+
+  @media screen and (max-width: $mobile) {
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 2rem;
+    }
   }
 }
