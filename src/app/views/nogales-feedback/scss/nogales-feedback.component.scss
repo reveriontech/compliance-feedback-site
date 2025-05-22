@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-// for breakpoints
+// For breakpoints
 $mobile: 360px;
 $tablet: 768px;
 $desktop: 1024px;
 
+// For fonts
 .background-container, .thank-you {
   font-family: 'Poppins', sans-serif;
 }
 
+// Main Container
 .background-container {
   position: relative;
   width: 100%;
@@ -39,7 +41,7 @@ $desktop: 1024px;
         z-index: 2;
       }
 
-
+  // Another Container for the feedback form
   .another-container {
     background-color: #a34fae7a;
     border-radius: 1rem;
@@ -72,6 +74,7 @@ $desktop: 1024px;
       gap: 1.2rem;
     }
 
+    // Left side of the container
     .left-side {
       color: white;
       text-align: left;
@@ -131,6 +134,7 @@ $desktop: 1024px;
       }
     }
 
+    // Right side of the container for Form
     .right-side {
       background-color: #fff;
       padding: 2.5rem 2.5rem 2.5rem 2.5rem;
