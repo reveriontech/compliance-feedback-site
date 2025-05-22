@@ -1,4 +1,5 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Inject } from '@angular/core';
+import { MailSendData, MailService } from 'ejflab-front-lib';
 
 @Component({
   selector: 'app-nogales-feedback',
@@ -14,6 +15,13 @@ export class NogalesFeedbackComponent {
     department: '',
     message: ''
   };
+
+  constructor(
+    public mailService: MailService,
+    @Inject('emailRecipient') public emailRecipient: string,
+  ) {
+
+  }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
@@ -32,9 +40,25 @@ export class NogalesFeedbackComponent {
     this.isDropdownOpen = false;
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.isLoading = true;
     this.buttonText = 'Submitting...';
+
+    const request: MailSendData = {
+      to: [this.emailRecipient],
+      template: "/assets/templates/mails/test.html",
+      subject: "This is my subject",
+      params: {
+        data: {
+          title: "This is my title",
+          content: "This is my content"
+        }
+      },
+      //replyTo: this.renderingData.providerEmail,
+    };
+
+    await this.mailService.send(request);
+
     setTimeout(() => {
       this.buttonText = 'Submit';
       this.submitted = true;
