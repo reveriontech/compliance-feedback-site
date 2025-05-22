@@ -1,4 +1,37 @@
-<body style="font-family: sans-serif;">
-    <h1>${data.title}</h1>
-    <p>${data.content}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email</title>
+  <style>
+    @media only screen and (max-width: 480px) {
+      .email-container {
+        padding: 15px !important;
+      }
+      .title {
+        font-size: 15px !important;
+      }
+      .message {
+        font-size: 13px !important;
+      }
+    }
+  </style>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0;">
+  <section class="email-container" style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #f5f5f5; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);">
+    <div class="content">
+      <h2 class="title" style="font-size: 16px; font-weight: 600; color: #333; margin-bottom: 20px;">${data.title}</h2>
+      <hr style="border: none; border-top: 1px solid #ddd; margin: 15px 0;">
+
+      <div class="message" style="font-size: 14px; color: #333; margin-bottom: 20px; white-space: pre-wrap;">${data.content}</div>
+
+      <hr style="border: none; border-top: 1px solid #ddd; margin: 15px 0;">
+
+      <div class="footer" style="text-align: center; font-size: 12px; color: #666;">
+        <p>© Nogales Psychological Counseling</p>
+      </div>
+    </div>
+  </section>
 </body>
+</html>

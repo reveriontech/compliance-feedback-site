@@ -4,7 +4,7 @@ import { MailSendData, MailService } from 'ejflab-front-lib';
 @Component({
   selector: 'app-nogales-feedback',
   templateUrl: './nogales-feedback.component.html',
-  styleUrls: ['./scss/nogales-feedback.component.scss']
+  styleUrls: ['./scss/_nogales-feedback.component.scss']
 })
 export class NogalesFeedbackComponent {
   submitted = false;
@@ -52,26 +52,29 @@ export class NogalesFeedbackComponent {
     const year = now.getFullYear();
     const formattedDate = `${day}-${month}-${year}`;
 
+    // Format message content to preserve line breaks
+    const formattedMessage = this.formData.message.replace(/\n/g, '<br>');
+
         const request: MailSendData = {
           to: [this.emailRecipient],
           template: "/assets/templates/mails/test.html",
-          subject: `FEEDBACK from ${this.formData.department} - ${formattedDate}`,
+          subject: `Feedback from ${this.formData.department} - ${formattedDate}`,
           params: {
             data: {
-              title: `Feedback from ${this.formData.department}`,
-              content: this.formData.message
+              title: `Feedback for ${this.formData.department}`,
+              content: formattedMessage
             }
           },
         };
 
-    await this.mailService.send(request);
+        await this.mailService.send(request);
 
-    setTimeout(() => {
-      this.buttonText = 'Submit';
-      this.submitted = true;
-      this.isLoading = false;
-    }, 2000);
-  }
+          setTimeout(() => {
+            this.buttonText = 'Submit';
+            this.submitted = true;
+            this.isLoading = false;
+          }, 2000);
+        }
 
   resetForm() {
     this.formData.department = '';
