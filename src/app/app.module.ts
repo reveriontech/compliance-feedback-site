@@ -31,7 +31,7 @@ import { MyConstants } from '@ejfdelgado/ejflab-common/src/MyConstants';
 import { NogalesFeedbackModule } from "./views/nogales-feedback/nogales-feedback.module";
 
 if (location.hostname == "localhost") {
-  MyConstants.SRV_ROOT = `https://${location.hostname}:8081/`;
+  MyConstants.SRV_ROOT = `http://${location.hostname}:8081/`;
 }
 
 @NgModule({

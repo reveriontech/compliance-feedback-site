@@ -44,18 +44,25 @@ export class NogalesFeedbackComponent {
     this.isLoading = true;
     this.buttonText = 'Submitting...';
 
-    const request: MailSendData = {
-      to: [this.emailRecipient],
-      template: "/assets/templates/mails/test.html",
-      subject: "This is my subject",
-      params: {
-        data: {
-          title: "This is my title",
-          content: "This is my content"
-        }
-      },
-      //replyTo: this.renderingData.providerEmail,
-    };
+    // Format date as dd-MMM-yyyy
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = monthNames[now.getMonth()];
+    const year = now.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
+        const request: MailSendData = {
+          to: [this.emailRecipient],
+          template: "/assets/templates/mails/test.html",
+          subject: `FEEDBACK from ${this.formData.department} - ${formattedDate}`,
+          params: {
+            data: {
+              title: `Feedback from ${this.formData.department}`,
+              content: this.formData.message
+            }
+          },
+        };
 
     await this.mailService.send(request);
 
