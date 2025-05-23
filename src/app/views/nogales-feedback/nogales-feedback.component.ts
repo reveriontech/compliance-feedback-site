@@ -31,6 +31,7 @@ export class NogalesFeedbackComponent {
     }
   }
 
+  // This part is for dropdown department
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
@@ -40,11 +41,13 @@ export class NogalesFeedbackComponent {
     this.isDropdownOpen = false;
   }
 
+
+  // This part is for submit
   async onSubmit() {
     this.isLoading = true;
     this.buttonText = 'Submitting...';
 
-    // Format date as dd-MMM-yyyy
+    // This part is for date formatting
     const now = new Date();
     const day = String(now.getDate()).padStart(2, '0');
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -55,26 +58,29 @@ export class NogalesFeedbackComponent {
     // Format message content to preserve line breaks
     const formattedMessage = this.formData.message.replace(/\n/g, '<br>');
 
-        const request: MailSendData = {
-          to: [this.emailRecipient],
-          template: "/assets/templates/mails/test.html",
-          subject: `Feedback from ${this.formData.department} - ${formattedDate}`,
-          params: {
-            data: {
-              title: `Feedback for ${this.formData.department}`,
-              content: formattedMessage
-            }
-          },
-        };
-
-        await this.mailService.send(request);
-
-          setTimeout(() => {
-            this.buttonText = 'Submit';
-            this.submitted = true;
-            this.isLoading = false;
-          }, 2000);
+    const request: MailSendData = {
+      to: [this.emailRecipient],
+      template: "/assets/templates/mails/test.html",
+      subject: `Feedback from ${this.formData.department} - ${formattedDate}`,
+      params: {
+        data: {
+          title: `Feedback for ${this.formData.department}`,
+          content: formattedMessage
         }
+      },
+    };
+
+    // Handle submit loading and error
+    try {
+      await this.mailService.send(request);
+      this.submitted = true;
+    } catch (error) {
+      console.error('Error sending email:', error);
+    } finally {
+      this.buttonText = 'Submit';
+      this.isLoading = false;
+    }
+  }
 
   resetForm() {
     this.formData.department = '';
