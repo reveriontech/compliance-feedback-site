@@ -68,7 +68,7 @@ if (location.hostname == "localhost") {
     { provide: 'msTenant', useValue: '' },
     { provide: 'msClientId', useValue: '' },
     { provide: "msGroupIdMap", useValue: {} },
-    { provide: "emailRecipient", useValue: "rodmapped@gmail.com" },
+    { provide: "emailRecipient", useValue: "hikarunara432@gmail.com" },
   ],
   bootstrap: [AppComponent],
 })

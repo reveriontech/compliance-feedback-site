@@ -58,14 +58,24 @@ export class NogalesFeedbackComponent {
     // Format message content to preserve line breaks
     const formattedMessage = this.formData.message.replace(/\n/g, '<br>');
 
+    // Generate unique submission ID temporary..
+    const submissionId = `SUB-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
+    // Format date and time for email
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const formattedDateTime = `${formattedDate} at ${hours}:${minutes}`;
+
     const request: MailSendData = {
       to: [this.emailRecipient],
       template: "/assets/templates/mails/test.html",
-      subject: `Feedback from ${this.formData.department} - ${formattedDate}`,
+      subject: ` ${this.formData.department} - ${formattedDate}`,
       params: {
         data: {
-          title: `Feedback for ${this.formData.department}`,
-          content: formattedMessage
+          title: `${this.formData.department}`,
+          content: formattedMessage,
+          date: formattedDateTime,
+          id: submissionId
         }
       },
     };
