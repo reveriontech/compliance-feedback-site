@@ -18,27 +18,45 @@ export class NogalesFeedbackComponent implements OnInit {
   countdown: number = 300;
   showNewSubmissionButton = false;
   intervalId: any;
+  private readonly TIMER_KEY = 'nogales_feedback_timer';
+  private readonly SUBMITTED_KEY = 'nogales_feedback_submitted';
 
   ngOnInit(): void {
+    const savedCountdown = localStorage.getItem(this.TIMER_KEY);
+    const savedSubmitted = localStorage.getItem(this.SUBMITTED_KEY);
+
+    if (savedCountdown !== null) {
+      this.countdown = parseInt(savedCountdown, 10);
+    } else {
+      this.countdown = 300;
+    }
+
+    this.submitted = savedSubmitted === 'true';
+
     this.startCountdown();
   }
 
   startCountdown(): void {
     this.showNewSubmissionButton = false;
-    this.countdown = 300;
+    // Don't reset countdown here, it's loaded from ngOnInit
 
-    // Run the interval inside NgZone to trigger change detection
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+
     this.ngZone.runOutsideAngular(() => {
       this.intervalId = setInterval(() => {
         this.countdown--;
+        localStorage.setItem(this.TIMER_KEY, this.countdown.toString());
 
         if (this.countdown <= 0) {
           clearInterval(this.intervalId);
+          localStorage.removeItem(this.TIMER_KEY);
+          localStorage.removeItem(this.SUBMITTED_KEY);
           this.ngZone.run(() => {
             this.showNewSubmissionButton = true;
           });
         } else {
-          // Trigger UI update for each countdown tick
           this.ngZone.run(() => {});
         }
       }, 1000);
@@ -119,6 +137,7 @@ export class NogalesFeedbackComponent implements OnInit {
     try {
       await this.mailService.send(request);
       this.submitted = true;
+      localStorage.setItem(this.SUBMITTED_KEY, 'true');
     } catch (error) {
       console.error('Error sending email:', error);
     } finally {
@@ -133,6 +152,9 @@ export class NogalesFeedbackComponent implements OnInit {
     this.submitted = false;
     this.buttonText = 'Submit';
     this.isLoading = false;
+    localStorage.removeItem(this.TIMER_KEY);
+    localStorage.removeItem(this.SUBMITTED_KEY);
+    this.countdown = 300;
     this.startCountdown();
   }
 }
