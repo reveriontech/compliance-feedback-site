@@ -25,20 +25,18 @@ export class NogalesFeedbackComponent implements OnInit {
     const savedCountdown = localStorage.getItem(this.TIMER_KEY);
     const savedSubmitted = localStorage.getItem(this.SUBMITTED_KEY);
 
-    if (savedCountdown !== null) {
+    this.submitted = savedSubmitted === 'true';
+
+    if (this.submitted && savedCountdown !== null) {
       this.countdown = parseInt(savedCountdown, 10);
+      this.startCountdown();
     } else {
       this.countdown = 300;
     }
-
-    this.submitted = savedSubmitted === 'true';
-
-    this.startCountdown();
   }
 
   startCountdown(): void {
     this.showNewSubmissionButton = false;
-    // Don't reset countdown here, it's loaded from ngOnInit
 
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -138,6 +136,9 @@ export class NogalesFeedbackComponent implements OnInit {
       await this.mailService.send(request);
       this.submitted = true;
       localStorage.setItem(this.SUBMITTED_KEY, 'true');
+      this.countdown = 300;
+      localStorage.setItem(this.TIMER_KEY, this.countdown.toString());
+      this.startCountdown();
     } catch (error) {
       console.error('Error sending email:', error);
     } finally {
@@ -155,6 +156,9 @@ export class NogalesFeedbackComponent implements OnInit {
     localStorage.removeItem(this.TIMER_KEY);
     localStorage.removeItem(this.SUBMITTED_KEY);
     this.countdown = 300;
-    this.startCountdown();
+    this.showNewSubmissionButton = false;
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 }
