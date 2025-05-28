@@ -58,7 +58,13 @@
                     <br>
                     <p>Your anonymous submission has been shared with our team.</p>
                     <p>We will review it shortly.</p>
-                    <button (click)="resetForm()">Make New Submission</button>
+
+                    <!-- This part is for the countdown -->
+                    <div class="countdown-container" *ngIf="!showNewSubmissionButton">
+                      Please wait <span>{{ formatTime(countdown) }}</span> before making a new submission.
+                    </div>
+                    <!-- Make New Submission button. Only display when then coutdown is done.-->
+                    <button *ngIf="showNewSubmissionButton" (click)="resetForm()">Make New Submission</button>
                   </div>
                 </ng-template>
               </div>

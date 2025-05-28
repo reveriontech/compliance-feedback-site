@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject } from '@angular/core';
+import { Component, HostListener, Inject, OnInit, NgZone } from '@angular/core';
 import { MailSendData, MailService } from 'ejflab-front-lib';
 
 @Component({
@@ -6,7 +6,7 @@ import { MailSendData, MailService } from 'ejflab-front-lib';
   templateUrl: './nogales-feedback.component.html',
   styleUrls: ['./scss/_nogales-feedback.component.scss']
 })
-export class NogalesFeedbackComponent {
+export class NogalesFeedbackComponent implements OnInit {
   submitted = false;
   buttonText = 'Submit';
   isDropdownOpen = false;
@@ -15,13 +15,48 @@ export class NogalesFeedbackComponent {
     department: '',
     message: ''
   };
+  countdown: number = 300;
+  showNewSubmissionButton = false;
+  intervalId: any;
+
+  ngOnInit(): void {
+    this.startCountdown();
+  }
+
+  startCountdown(): void {
+    this.showNewSubmissionButton = false;
+    this.countdown = 300;
+
+    // Run the interval inside NgZone to trigger change detection
+    this.ngZone.runOutsideAngular(() => {
+      this.intervalId = setInterval(() => {
+        this.countdown--;
+
+        if (this.countdown <= 0) {
+          clearInterval(this.intervalId);
+          this.ngZone.run(() => {
+            this.showNewSubmissionButton = true;
+          });
+        } else {
+          // Trigger UI update for each countdown tick
+          this.ngZone.run(() => {});
+        }
+      }, 1000);
+    });
+  }
+
+  // This part is for countdown timer
+   formatTime(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
 
   constructor(
     public mailService: MailService,
     @Inject('emailRecipient') public emailRecipient: string,
-  ) {
-
-  }
+    private ngZone: NgZone  // Add NgZone to constructor
+  ) {}
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
@@ -98,5 +133,6 @@ export class NogalesFeedbackComponent {
     this.submitted = false;
     this.buttonText = 'Submit';
     this.isLoading = false;
+    this.startCountdown();
   }
 }

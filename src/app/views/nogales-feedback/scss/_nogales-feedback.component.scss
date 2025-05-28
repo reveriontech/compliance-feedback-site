@@ -350,6 +350,30 @@ $desktop: 1024px;
     background: #a34fae;
   }
 
+  .countdown-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+      span {
+        font-weight: 600;
+        border-radius: 7px;
+        padding: 6px;
+        background-color: #a34fae;
+        color: #fff;
+        cursor: pointer;
+
+        :hover {
+          color: #333;
+          background-color: #ffffff;
+          border: #333 1px solid;
+          transition: all 0.3s ease;
+
+        }
+      }
+
+  }
+
   @media screen and (max-width: $tablet) {
     align-items: center;
     text-align: center;
