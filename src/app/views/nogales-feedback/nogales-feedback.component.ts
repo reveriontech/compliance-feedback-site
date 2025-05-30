@@ -55,6 +55,7 @@ export class NogalesFeedbackComponent implements OnInit {
 
         if (this.countdown <= 0) {
           clearInterval(this.intervalId);
+          this.intervalId = null;
           localStorage.removeItem(this.TIMER_KEY);
           localStorage.removeItem(this.SUBMITTED_KEY);
           this.ngZone.run(() => {
