@@ -1,5 +1,6 @@
 import { Component, HostListener, Inject, OnInit, NgZone } from '@angular/core';
 import { MailSendData, MailService } from 'ejflab-front-lib';
+import { CaptchaService } from './services/captcha.service';
 
 @Component({
   selector: 'app-nogales-feedback',
@@ -20,6 +21,11 @@ export class NogalesFeedbackComponent implements OnInit {
   intervalId: any;
   private readonly TIMER_KEY = 'nogales_feedback_timer';
   private readonly SUBMITTED_KEY = 'nogales_feedback_submitted';
+  showCaptcha = false;
+  captchaChecked = false;
+  captchaError = false;
+  isVerifying = false;
+  verificationSuccess = false;
 
   ngOnInit(): void {
     const savedCountdown = localStorage.getItem(this.TIMER_KEY);
@@ -71,7 +77,8 @@ export class NogalesFeedbackComponent implements OnInit {
   constructor(
     public mailService: MailService,
     @Inject('emailRecipient') public emailRecipient: string,
-    private ngZone: NgZone  // Add NgZone to constructor
+    private ngZone: NgZone,
+    private captchaService: CaptchaService
   ) {}
 
   @HostListener('document:click', ['$event'])
@@ -95,6 +102,20 @@ export class NogalesFeedbackComponent implements OnInit {
 
   // This part is for submit
   async onSubmit() {
+    // First click - show captcha
+    if (!this.showCaptcha) {
+      this.showCaptcha = true;
+      this.captchaService.reset();
+      return;
+    }
+
+    // If captcha is shown but not verified, don't proceed
+    if (!this.verificationSuccess) {
+      this.captchaError = true;
+      return;
+    }
+
+    // If we get here, captcha is verified, proceed with submission
     this.isLoading = true;
     this.buttonText = 'Submitting...';
 
@@ -131,7 +152,6 @@ export class NogalesFeedbackComponent implements OnInit {
       },
     };
 
-    // Handle submit loading and error
     try {
       await this.mailService.send(request);
       this.submitted = true;
@@ -147,12 +167,41 @@ export class NogalesFeedbackComponent implements OnInit {
     }
   }
 
+  async onCaptchaCheck(event: any) {
+    this.captchaChecked = event.target.checked;
+    this.captchaError = false;
+
+    if (this.captchaChecked) {
+      this.isVerifying = true;
+      this.captchaService.trackFormInteraction('checkbox_checked');
+
+      // Collect more data before verification
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      const isHuman = this.captchaService.analyzeBehavior();
+      this.verificationSuccess = isHuman;
+
+      if (!isHuman) {
+        this.captchaChecked = false;
+        this.captchaError = true;
+      }
+
+      this.isVerifying = false;
+    } else {
+      this.verificationSuccess = false;
+    }
+  }
+
   resetForm() {
     this.formData.department = '';
     this.formData.message = '';
     this.submitted = false;
     this.buttonText = 'Submit';
     this.isLoading = false;
+    this.showCaptcha = false;
+    this.captchaChecked = false;
+    this.verificationSuccess = false;
+    this.captchaError = false;
     localStorage.removeItem(this.TIMER_KEY);
     localStorage.removeItem(this.SUBMITTED_KEY);
     this.countdown = 300;

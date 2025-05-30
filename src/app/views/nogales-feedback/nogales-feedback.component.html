@@ -46,7 +46,36 @@
                         #msg="ngModel"
                       ></textarea>
                     </div>
-                    <button type="submit" [disabled]="!feedbackForm.form.valid || isLoading">
+
+                    <!-- This part is for Checkbox Captcha -->
+                    <div *ngIf="showCaptcha" class="captcha-container" style="margin: 1rem 0;">
+                      <div class="captcha-checkbox" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <input
+                          type="checkbox"
+                          id="captcha"
+                          (change)="onCaptchaCheck($event)"
+                          [checked]="captchaChecked"
+                          [disabled]="isVerifying"
+                        >
+                        <label for="captcha" style="color: #555; font-size: 0.9rem;">
+                          I am not a robot
+                        </label>
+                        <!-- Verification Status -->
+                        <div *ngIf="isVerifying" style="margin-left: 0.5rem; display: flex; align-items: center;">
+                          <div class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></div>
+                          <span style="margin-left: 0.5rem; font-size: 0.8rem; color: #666;">Verifying...</span>
+                        </div>
+                        <div *ngIf="verificationSuccess" style="margin-left: 0.5rem; color: #4CAF50; font-size: 0.8rem;">
+                          ✓ Verified
+                        </div>
+                      </div>
+                      <div *ngIf="captchaError" style="color: #ff4444; font-size: 0.8rem; margin-top: 0.5rem;">
+                        Verification failed. Please try again.
+                      </div>
+                    </div>
+
+                    <!-- This part is for submit button -->
+                    <button type="submit" [disabled]="!feedbackForm.form.valid || isLoading || (showCaptcha && !verificationSuccess)">
                       <span *ngIf="!isLoading">{{ buttonText }}</span>
                       <div class="spinner" *ngIf="isLoading"></div>
                     </button>
